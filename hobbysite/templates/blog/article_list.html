@@ -1,0 +1,18 @@
+<!-- blog/templates/blog/article_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Article List</title>
+</head>
+<body>
+    <h1>Article List</h1>
+    <ul>
+        {% for article in object_list %}
+            <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+        {% empty %}
+            <li>No articles found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

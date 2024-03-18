@@ -1,0 +1,16 @@
+<!-- blog/templates/blog/article_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ article.title }}</title>
+</head>
+<body>
+    <h1>{{ article.title }}</h1>
+    <p><strong>Category:</strong> {{ article.category }}</p>
+    <p><strong>Created On:</strong> {{ article.created_on }}</p>
+    <p><strong>Last Updated:</strong> {{ article.updated_on }}</p>
+    <p>{{ article.entry }}</p>
+    <a href="{% url 'blog:article_list' %}">Back to Article List</a>
+</body>
+</html>
