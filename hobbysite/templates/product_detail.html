@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block custom_css %}
+    div {
+        width: 60%;
+    }
+{% endblock %}
+
+{% block content %}
+    <h2>{{ product.name }}</h2>
+    <div>
+        <p>Product Type: {{ product.product_type }}
+        <br> Price: P{{ product.price }} 
+        <br><br> {{product.description }}
+        </p>
+    </div>
+{% endblock %}
