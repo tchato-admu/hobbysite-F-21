@@ -4,12 +4,14 @@ from .models import Product, ProductType
 
 
 def product_list(request):
-    products = Product.objects.all()
+    product_types = ProductType.objects.all()
 
     ctx = {
-        'products': products,
+        'product_types': product_types,
+        'products': Product.objects.all(),
     }
     return render(request, 'product_list.html', ctx)
+
 
 def product_detail(request, pk):
     product = Product.objects.get(pk=pk)

@@ -3,12 +3,13 @@
 {% block custom_css %}
     div {
         width: 60%;
+        margin: 20px;
     }
 {% endblock %}
 
 {% block content %}
-    <h2>{{ product.name }}</h2>
     <div>
+        <h2>{{ product.name }}</h2>
         <p>Product Type: {{ product.product_type }}
         <br> Price: P{{ product.price }} 
         <br><br> {{product.description }}

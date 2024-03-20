@@ -11,7 +11,7 @@ class ProductType(models.Model):
     
 
     class Meta:
-        ordering = ['name'] # order by name in ascending order
+        ordering = ['name']
 
 
 class Product(models.Model):
@@ -35,5 +35,3 @@ class Product(models.Model):
 
     class Meta:
         ordering = ['name']
-    
-
