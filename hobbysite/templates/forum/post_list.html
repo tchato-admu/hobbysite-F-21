@@ -1,0 +1,18 @@
+<!-- blog/templates/blog/article_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forum</title>
+</head>
+<body>
+    <h1>Forum</h1>
+    <ul>
+        {% for post in object_list %}
+            <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+        {% empty %}
+            <li>No posts found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

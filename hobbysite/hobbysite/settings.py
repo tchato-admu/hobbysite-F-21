@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 from dotenv import load_dotenv
 import os
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'wiki',
     'blog',
     'commissions',
+    'forum',
 ]
 
 MIDDLEWARE = [
