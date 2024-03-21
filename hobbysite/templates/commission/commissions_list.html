@@ -1,0 +1,13 @@
+{% extends "commission/base.html" %}
+{% block content %}
+    <div style="background-color: #f0e68c; padding: 20px; font-family: 'Times New Roman', Times, serif; font-size: 18px; border: 1px solid #ffb6c1;">
+        <ul>
+            {% for commission in commissions_list %}
+            <li style="border-bottom: 1px solid #ffb6c1; padding-bottom: 10px;">
+                <a href="{{commission.get_absolute_url}}" style="color: #8b4513; text-decoration: none;">{{commission.title}}</a>
+                <p style="color: #696969; margin-top: 5px;">Submitted: {{ commission.created_on }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

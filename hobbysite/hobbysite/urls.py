@@ -20,6 +20,5 @@ from django.urls import include, path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("commissions/", include("commissions.urls", namespace="commissions")),
-    # Other app URLs can be included here
 ]
 

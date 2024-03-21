@@ -1,0 +1,20 @@
+{% extends "commission/base.html" %}
+{% block content %}
+    <div style="background-color: #ffb6c1; padding: 20px; font-family: Arial, sans-serif;">
+        <h1>{{ commissions_detail.title }}</h1>
+        <p style="font-size: 16px;">People required: {{ commissions_detail.people_required }}</p>
+        <p style="font-size: 16px;">Submitted on {{ commissions_detail.created_on }}</p>
+        <p style="font-size: 16px;">Updated on {{ commissions_detail.updated_on }}</p>
+        <br/>
+        <p style="font-size: 16px;">{{ commissions_detail.description }}</p>
+        <br/>
+        <h2 style="font-size: 18px;">Comments</h2>
+        {% for comment in commissions_detail.comments.all %}
+        <p style="font-size: 14px;">Created: {{ comment.created_on }}</p>
+        <p style="font-size: 14px;">Updated: {{ comment.updated_on }}</p>
+        <li style="font-size: 16px;">{{comment.entry}}</li>
+        <br/>
+        <br/>
+        {% endfor %}
+    </div>
+{% endblock %}
