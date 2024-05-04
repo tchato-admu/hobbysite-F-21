@@ -1,0 +1,24 @@
+{% extends 'navbar.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div class="container">
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}!</p>
+    {% else %}
+        <p>Hello, Stranger!</p>
+    {% endif %}
+
+    <h1>Welcome to our Hobbysite!</h1>
+    <p>This is the homepage where you can access different sections:</p>
+    
+    <ul>
+        <li><a href="{% url 'blog:article_list' %}">Blog</a> - A collection of blogposts from all our users</li>
+        <li><a href="{% url 'wiki:article_list' %}">Wiki</a> - A collaborative knowledge base</li>
+        <li><a href="{% url 'commissions:commissions_list' %}">Commissions</a> - Explore available commissions</li>
+        <li><a href="{% url 'merchstore:list' %}">Merchstore</a> - Shop and sell merchandise</li>
+        <li><a href="{% url 'forum:post_list' %}">Forum</a> - Engage in discussions and share ideas</li>
+    </ul>
+</div>
+
+{% endblock %}

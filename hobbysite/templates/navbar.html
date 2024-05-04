@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTC-8">
+    <meta charset="UTF-8">
     <title>{% block title %}My Website{% endblock %}</title>
     <style>
         /* CSS for nav bar */
@@ -11,10 +11,18 @@
             padding: 10px;
         }
 
+        .site-name {
+            font-size: 24px; /
+            font-weight: bold; 
+        }
+
         nav ul {
             list-style-type: none;
             margin: 0;
             padding: 0;
+            display: flex; /* Use flexbox for layout */
+            justify-content: space-between; /* Push items to the ends */
+            align-items: center; /* Align items vertically */
         }
 
         nav ul li {
@@ -36,11 +44,22 @@
     <nav>
         <span class="site-name">Hobby Site</span>
         <ul>
+            <li><a href="{% url 'homepage:homepage' %}">Home</a></li>
             <li><a href="{% url 'blog:article_list' %}">Blog</a></li>
             <li><a href="{% url 'wiki:article_list' %}">Wiki</a></li>
             <li><a href="{% url 'commissions:commissions_list' %}">Commissions</a></li>
             <li><a href="{% url 'merchstore:list' %}">Merchstore</a></li>
             <li><a href="{% url 'forum:post_list' %}">Forum</a></li>
+            {% if user.is_authenticated %}
+                <li>
+                    <form action="{% url 'logout' %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form>
+                </li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
         </ul>
     </nav>
     
@@ -49,8 +68,5 @@
         {% endblock %}
     </div>
 
-    <footer>
-        <!-- Footer content here -->
-    </footer>
 </body>
 </html>

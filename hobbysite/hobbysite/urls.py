@@ -10,5 +10,6 @@ urlpatterns = [
     path('', include('merchstore.urls', namespace="merchstore")),
     path('accounts/', include ('django.contrib.auth.urls')),
     path('user_management/', include('user_management.urls', namespace="user_management")),
+    path('homepage/', include('homepage.urls', namespace="homepage")),
 ]
 

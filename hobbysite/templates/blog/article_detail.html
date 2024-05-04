@@ -1,4 +1,6 @@
-<!-- blog/templates/blog/article_detail.html -->
+{% extends 'navbar.html' %}
+{% block title %}{{ article.title }}{% endblock %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,3 +16,4 @@
     <a href="{% url 'blog:article_list' %}">Back to Article List</a>
 </body>
 </html>
+{% endblock %}
