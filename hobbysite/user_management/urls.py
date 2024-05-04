@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import UserUpdateView
 
+
 app_name = 'user_managment'
 
 urlpatterns = [
