@@ -1,9 +1,10 @@
-from django.db.models.base import Model as Model
+from django.db.models.base import Model 
+from django.contrib.auth.models import User
 from django.db.models.query import QuerySet
-from django.shortcuts import render
-from django.views.generic.edit import UpdateView
+from django.shortcuts import redirect, render
+from django.views.generic.edit import UpdateView, CreateView
 from .models import Profile
-from .forms import ProfileForm
+from .forms import ProfileForm, RegistrationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
@@ -16,3 +17,14 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user.profile
+    
+class UserCreateView(CreateView):
+    model = User
+    form_class = RegistrationForm
+    template_name = "registration/register.html"
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        user = form.save()
+        Profile.objects.create(user=user)
+        return redirect(self.success_url)

@@ -1,13 +1,19 @@
-{% extends 'base.html' %}
+{% extends 'navbar.html' %}
 {% block title %}Login{% endblock %}
 {% block content %}
-
-<a href="{% url 'password_reset' %}">You forgot your password</a>
 
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Login</button>
 </form>
+
+<div>
+    <a href="{% url 'password_reset' %}">Forgot your password?</a>
+</div>
+
+<div>
+    <a href="{% url 'user_management:user_registration' %}">Make an account</a>
+</div>
 
 {% endblock %}
