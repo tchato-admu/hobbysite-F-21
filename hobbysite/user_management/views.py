@@ -13,10 +13,14 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = ProfileForm
     template_name = 'user_detail.html'
-    success_url = '/admin'
+    success_url = reverse_lazy('homepage:homepage')
 
     def get_object(self, queryset=None):
         return self.request.user.profile
+    
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
     
 class UserCreateView(CreateView):
     model = User
@@ -26,5 +30,11 @@ class UserCreateView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        Profile.objects.create(user=user)
+        
+        Profile.objects.create(
+            user=user,
+            display_name=user.username, 
+            email_address=user.email  
+        )
+
         return redirect(self.success_url)
