@@ -1,21 +1,42 @@
 {% extends 'navbar.html' %}
-{% block title %}Article List{% endblock %}
+
+{% block title %}
+    Article List
+{% endblock title %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Article List</title>
-</head>
-<body>
-    <h1>Article List</h1>
-    <ul>
-        {% for article in object_list %}
-            <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
-        {% empty %}
-            <li>No articles found.</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+
+    <h1>Blog</h1>
+
+    {% if request.user.is_authenticated %}
+        <h2>My Articles</h2>
+            <ul>
+                {% for article in articles_by_author %}
+                    <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+                {% empty %}
+                    <li>No articles have been written.</li>
+                {% endfor %}
+            </ul>
+        <a href="{% url 'blog:article_create' %}"><button>Write an Article</button></a>
+    {% endif %}
+
+    <h2>All articles</h2>
+    {% for article_category in object_list %}
+        <h3>{{article_category.name}}</h3>
+        <h4>{{article_category.description}}</h4>
+        <ul>
+            {% if request.user.is_authenticated %}
+                {% for article in article_category.article_set.all %}
+                    {% if article not in articles_by_author %}
+                        <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% for article in article_category.article_set.all %}
+                    <li><a href="{{ article.get_absolute_url }}">{{ article.title }} </a></li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    {% endfor %}
+
 {% endblock %}
