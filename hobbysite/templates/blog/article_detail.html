@@ -1,18 +1,72 @@
 {% extends 'navbar.html' %}
-{% block title %}{{ article.title }}{% endblock %}
+{% load static %}
+
+{% block title %}
+    {{ article.title }}
+{% endblock title %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
     <title>{{ article.title }}</title>
 </head>
+
 <body>
     <h1>{{ article.title }}</h1>
+    <h2>by {{ article.author }}</h2>
+
     <p><strong>Category:</strong> {{ article.category }}</p>
     <p><strong>Created On:</strong> {{ article.created_on }}</p>
     <p><strong>Last Updated:</strong> {{ article.updated_on }}</p>
+
+    {% if article.header_image %}
+        <img src="{{ article.header_image.url }}" alt="Image">
+    {% endif %}
+
     <p>{{ article.entry }}</p>
+
+    {% if user.is_authenticated %}
+        {% if user.profile == article.author %}
+            <a href="{% url 'blog:article_update' article.pk %}">Edit Article</a>
+        {% endif %}
+    {% endif %}
+
+    {% if articles_by_author %}
+    <h3>Related Articles by {{ article.author }}</h3>
+    <ul>
+        {% for related_article in articles_by_author %}
+            <li><a href="{{ related_article.get_absolute_url }}">{{ related_article.title }}</a></li>
+        {% endfor %} 
+    </ul>
+    {% else %}
+        <p>No related articles found for {{ article.author }}</p>
+    {% endif %}
+
+
+    {% if user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit">Submit Comment</button>
+        </form>
+    {% else %}
+        <p>Please <a href="{% url 'login' %}">log in</a> to comment.</p>
+    {% endif %}
+
+    <h4>Comments</h4>
+    <ul>
+        {% for comment in article.comment_set.all %}
+            <li>
+                <h4>{{ comment.author }}</h4>
+                <p>{{ comment.entry }}</p>
+                <p>Created on: {{ comment.created_on }}</p>
+                <p>Updated on: {{ comment.updated_on }}</p>
+            </li>
+        {% empty %}
+            <li>No comments</li>
+        {% endfor %}
+    </ul>
+
     <a href="{% url 'blog:article_list' %}">Back to Article List</a>
 </body>
 </html>

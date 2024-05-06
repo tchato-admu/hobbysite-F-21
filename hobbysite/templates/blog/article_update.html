@@ -1,0 +1,15 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block title %}
+    Update Article
+{% endblock title %}
+
+{% block content %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Update</button>
+    </form>
+    <a href="{% url 'blog:article_list' %}">Back to Article List</a>
+{% endblock %}
