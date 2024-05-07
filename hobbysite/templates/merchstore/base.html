@@ -1,19 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Merchandise Store</title>
-    <style>
-        body {
-            font-family: "Garamond", serif;
-        }
-        {% block custom_css %}{% endblock %}
-    </style>
-</head>
-
-<body>
-    <header> <h1>Merchandise Store</h1> </header>
-</hr>
-    {% block content %}
+{% extends '../navbar.html' %}
+{% block title %}Merchandise Store{% endblock %}
+{% block css %}
+    {% block custom_css %}
     {% endblock %}
-</body>
-</html>
+{% endblock %}
+{% block content %}
+    <h1> Merchandise Store </h1>
+    {% block custom_content %}{% endblock %}
+    <!-- {% block logged_in %}{% endblock %}
+    {% block not_logged_in %}{% endblock %} -->
+{% endblock %}

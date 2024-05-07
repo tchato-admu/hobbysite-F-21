@@ -38,11 +38,28 @@
         nav ul li a:hover {
             text-decoration: underline;
         }
+
+        .head-nav {
+            display: inline;
+            justify-content: space-between;
+        }
+
+        .username {
+            display: inline;
+            margin-left: auto;
+        }
+        {% block css %}{% endblock %}
     </style>
 </head>
 <body>
     <nav>
-        <span class="site-name">Hobby Site</span>
+        <div class = "head-nav">
+            <span class="site-name">Hobby Site</span>
+            {% if user.is_authenticated %}
+            <h6 class = "username">{{user.profile.display_name}}</h6>
+            {% endif %}
+        </div>
+        <hr>
         <ul>
             <li><a href="{% url 'homepage:homepage' %}">Home</a></li>
             <li><a href="{% url 'blog:article_list' %}">Blog</a></li>

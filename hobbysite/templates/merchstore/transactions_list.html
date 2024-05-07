@@ -1,0 +1,21 @@
+{% extends "merchstore/base.html" %}
+
+{% block custom_css %}
+{% endblock %}
+
+{% block custom_content %}
+    {% if request.user.is_authenticated %}
+    
+    <h2> Transactions List </h2>
+    {% for buyer, transactions in transactions_by_buyers.items %}
+    <div class = "transaction_status">
+        <h3>{{buyer}}</h3>
+        {% for transaction in transactions %}
+        <ul>
+            <li>{{ transaction.product.name }}: {{ transaction.amount }} item/s</li>
+        </ul>
+        {% endfor %}
+    </div>
+    {% endfor %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "merchstore/base.html" %}
+
+{% block custom_css %}
+{% endblock %}
+
+{% block custom_content %}
+    {% if request.user.is_authenticated %}
+    <p>Owner: {{owner}}</p>
+    <form method = "POST">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <button>Update</button>
+    </form>
+    {% endif %}   
+{% endblock %}  
