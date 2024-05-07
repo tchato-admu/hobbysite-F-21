@@ -30,7 +30,6 @@ def product_list(request):
 
 def product_detail(request, pk):
     product = Product.objects.get(pk=pk)
-    user = Profile.objects.get(user=request.user)
     form = TransactionForm()
 
     if request.method == "POST":
@@ -49,7 +48,7 @@ def product_detail(request, pk):
             transaction.status = 'ON_CART'
         
             if request.user.is_authenticated:
-                transaction.buyer = Profile.objects.get(user=request.user)
+                transaction.buyer = request.user.profile
                 transaction.save()
                 return redirect(reverse('merchstore:cart'))
             else:
@@ -58,7 +57,6 @@ def product_detail(request, pk):
 
     ctx = {
         'product': product,
-        'user': user,
         'form': form
     }
     return render(request, 'merchstore/product_detail.html', ctx)
