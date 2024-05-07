@@ -2,6 +2,12 @@
 {% load static %}
 
 {% block content%}
+	{% if request.user.is_authenticated %}
+		{% if article.author == user.profile %}
+			<p><a href="{% url 'wiki:article_update' pk=object.pk %}">Edit</a></p>
+		{% endif %}
+	{% endif %}
+
 	<h1>{{ article.title }}</h1>
 	{% if article.header_image %}
 		<img src="{{ article.header_image.url }}" alt="there should be an image here!!">
