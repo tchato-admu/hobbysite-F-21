@@ -1,8 +1,6 @@
 {% extends "merchstore/base.html" %}
-
 {% block custom_css %}
 {% endblock %}
-
 {% block custom_content %}
     <h2> Items for Sale: </h2>
 
@@ -37,6 +35,7 @@
     {% else %}
     <h3> All Products </h3>
     <ul>
+    {% for product_type in product_types %}
         <li>{{product_type}}</li>
         <ul>
             {% for product in all_products %}
@@ -45,8 +44,8 @@
             {% endif %}
             {% endfor %}
         </ul>
+    {% endfor %}
     </ul>
     {% endif %}
-
     <button><a href = "{% url 'merchstore:product-create' %}">Create Product</a></button>
 {% endblock %}

@@ -1,12 +1,6 @@
 {% extends "merchstore/base.html" %}
-
 {% block custom_css %}
-    div {
-        width: 60%;
-        margin: 20px;
-    }
 {% endblock %}
-
 {% block custom_content %}
     <h3>{{product.name}}</h3>
     <h4>{{product.description}}</h4>
@@ -17,8 +11,8 @@
         <br>Status: {{product.status}}
         <br>By: {{product.owner}}    
     </h4>
-    {% if product.owner == user %}
-        <button href = {{product.update_product_url}}>Edit</button>
+    {% if product.owner == request.user.profile %}
+        <button><a href = "{{product.update_product_url}}">Edit</a></button>
 
     {% else %}
         <form method = "POST">
@@ -31,5 +25,4 @@
             {% endif %}
         </form>
     {% endif %}
-
 {% endblock %}  

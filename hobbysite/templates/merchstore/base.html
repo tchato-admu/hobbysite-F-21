@@ -5,8 +5,13 @@
     {% endblock %}
 {% endblock %}
 {% block content %}
-    <h1> Merchandise Store </h1>
+    <br>
+    <div class = "merch-nav" style="text-align: left;">
+        <div style="display: inline;">
+            <h1>Merchandise Store</h1>
+        </div>
+        <h3 style="display: inline;"><a href = "{% url 'merchstore:cart' %}">Cart</a></h3>
+        <h3 style="display: inline; margin-left: 20px;"><a href = "{% url 'merchstore:transaction-list' %}">Transactions</a></h3>
+    </div>
     {% block custom_content %}{% endblock %}
-    <!-- {% block logged_in %}{% endblock %}
-    {% block not_logged_in %}{% endblock %} -->
 {% endblock %}
