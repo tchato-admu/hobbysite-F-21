@@ -16,16 +16,15 @@ class ProductType(models.Model):
 
 
 class Product(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.IntegerField(default='1')
     status_choices = [
         ('AVAILABLE', 'Available'),
         ('ON_SALE', 'On Sale'),
         ('OUT_OF_STOCK', 'Out of Stock')
     ]
-
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    stock = models.IntegerField(default='1')
     status = models.CharField(max_length=12, choices=status_choices, default='AVAILABLE')
     owner = models.ForeignKey(
         Profile,
@@ -57,14 +56,6 @@ class Product(models.Model):
 
 
 class Transaction(models.Model):
-    status_choices = [
-        ('ON_CART', 'On Cart'),
-        ('TO_PAY', 'To Pay'),
-        ('TO_SHIP', 'To Ship'),
-        ('TO_RECEIVE', 'To Receive'),
-        ('DELIVERED', 'Delivered')
-    ]
-
     buyer = models.ForeignKey(
         Profile,
         on_delete=models.SET_NULL,
@@ -78,5 +69,12 @@ class Transaction(models.Model):
         related_name='transactions'
     )
     amount = models.PositiveBigIntegerField()
+    status_choices = [
+        ('ON_CART', 'On Cart'),
+        ('TO_PAY', 'To Pay'),
+        ('TO_SHIP', 'To Ship'),
+        ('TO_RECEIVE', 'To Receive'),
+        ('DELIVERED', 'Delivered')
+    ]
     status = models.CharField(max_length=10, choices=status_choices)
     created_on = models.DateTimeField(auto_now_add=True, null=True)

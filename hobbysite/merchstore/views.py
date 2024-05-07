@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils import timezone
 
 from .models import Product, ProductType, Transaction
 from user_management.models import Profile
@@ -34,15 +35,16 @@ def product_detail(request, pk):
 
     if request.method == "POST":
         form = TransactionForm(request.POST)
-
         if form.is_valid():
             transaction = form.save(commit=False)
-            transaction.amount = form.cleaned_data.get('amount')
-                                         
+            transaction.amount = form.cleaned_data.get('amount')                  
             transaction.product = product
+            transaction.created_on = timezone.now()
 
             if product.stock >= transaction.amount:
                 product.stock -= transaction.amount
+                if product.stock == 0:
+                    product.status = 'OUT_OF_STOCK'
                 product.save()
 
             transaction.status = 'ON_CART'
@@ -101,10 +103,15 @@ def product_update(request, pk):
             product.description = form.cleaned_data.get('description')
             product.price = form.cleaned_data.get('price')
             product.product_type = form.cleaned_data.get('product_type')
-            product.status = form.cleaned_data.get('status')
             product.owner = owner
-
+            
             product.stock = form.cleaned_data.get('stock')
+
+            if product.stock == 0:
+                product.status = 'OUT_OF_STOCK'
+            else:
+                product.status = form.cleaned_data.get('status')
+
 
             product.save()
             return redirect(reverse('merchstore:list'))
@@ -120,6 +127,7 @@ def transactions_cart(request):
     user = Profile.objects.get(user=request.user)
     user_transactions = Transaction.objects.filter(buyer=user)
     transactions_by_owner = {}
+
     for transaction in user_transactions:
         owner = transaction.product.owner
         if owner not in transactions_by_owner:
@@ -127,10 +135,7 @@ def transactions_cart(request):
         transactions_by_owner[owner].append(transaction)
     
     ctx = {
-        # 'user_transactions': user_transactions,
-        # 'product_owners': owner_transactions,
         'transactions_by_owner': transactions_by_owner,
-        'transaction_status': Transaction.status_choices
     }
     return render(request, 'merchstore/transactions_cart.html', ctx)
 
