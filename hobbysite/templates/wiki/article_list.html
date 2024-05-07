@@ -5,11 +5,18 @@
 	<h1>Wiki Articles</h1>
 	{% if request.user.is_authenticated %}
 		<h2>Your Articles</h2>
+		<ul>
 		{% for creations in user_made %}
-			<a href="{{ creations.get_absolute_url }}">
-				{{ creations }}
-			</a>
+			<li>
+				<a href="{{ creations.get_absolute_url }}">
+					{{ creations }}
+				</a>
+			</li>
+		{% empty %}
+			<p><i>You haven't written any articles. Write one now!</i></p>
 		{% endfor %}
+		</ul>
+		<p><a href="{% url 'wiki:article_create' %}">Write an article</a></p>
 	{% endif %}
 	<ul>
 		{% for category in categories %}
