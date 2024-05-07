@@ -1,18 +1,29 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Wiki</title>
-	</head>
-	<body>
-		<h1>Wiki Articles</h1>
-		<ul>
-			{% for article in object_list %}
-			<li>
-				<a href="{{ article.get_absolute_url }}">
-					{{ article }}
-				</a>
-			</li>
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block content%}
+	<h1>Wiki Articles</h1>
+	{% if request.user.is_authenticated %}
+		<h2>Your Articles</h2>
+		{% for creations in user_made %}
+			<a href="{{ creations.get_absolute_url }}">
+				{{ creations }}
+			</a>
+		{% endfor %}
+	{% endif %}
+	<ul>
+		{% for category in categories %}
+			<h2>{{ category.name }}</h2>
+			<p><i>{{ category.description }}</i></p>
+			{% for article in category.article_set.all %}
+				{% if article not in user_made %}
+					<li>
+						<a href="{{ article.get_absolute_url }}">
+							{{ article }}
+						</a>
+					</li>
+				{% endif %}
 			{% endfor %}
-		</ul>
-	</body>
-</html>
+		{% endfor %}
+	</ul>
+{% endblock %}

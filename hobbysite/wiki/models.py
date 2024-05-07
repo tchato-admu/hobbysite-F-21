@@ -14,12 +14,18 @@ class ArticleCategory(models.Model):
     
 class Article(models.Model):
     title = models.CharField(max_length=255)
+    author = models.ForeignKey(
+        'user_management.Profile',
+        on_delete=models.SET_NULL,
+        null=True
+    )
     category = models.ForeignKey(
         'ArticleCategory', 
         on_delete=models.SET_NULL,
         null=True
     )
     entry = models.TextField(null=True)
+    header_image = models.ImageField(upload_to="images/", null=True)
     createdon = models.DateTimeField(auto_now_add=True)
     updatedon = models.DateTimeField(auto_now=True)
     
@@ -31,5 +37,22 @@ class Article(models.Model):
     
     class Meta:
         ordering = ['-createdon']
+        
+class Comment(models.Model):
+    author = models.ForeignKey(
+        'user_management.Profile',
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    article = models.ForeignKey(
+        'Article',
+        on_delete=models.CASCADE
+    )
+    entry = models.TextField(null=True)
+    createdon = models.DateTimeField(auto_now_add=True)
+    updatedon = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['createdon']
     
     
