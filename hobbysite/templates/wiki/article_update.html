@@ -1,0 +1,12 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block content%}
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form.as_div }}
+		<button type="submit">Update</button>
+	</form>
+	<br />
+	<a href="{{ article.get_absolute_url }}">Back</a>
+{% endblock %}

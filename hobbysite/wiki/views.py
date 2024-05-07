@@ -3,7 +3,9 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 
 from .models import Article, ArticleCategory, Comment
 from user_management.models import Profile
@@ -63,5 +65,41 @@ class ArticleDetailView(DetailView):
         ctx = self.get_context_data(**kwargs) 
         return self.render_to_response(ctx)
     
-        
+class ArticleCreateView(LoginRequiredMixin, CreateView):
+    model = Article
+    form_class = ArticleForm
+    template_name = 'wiki/article_create.html'
+    
+    def get_success_url(self):
+        return reverse_lazy('wiki:article_detail', kwargs={ 'pk': self.object.pk })
+    
+    def form_valid(self, form):
+        author = Profile.objects.get(user=self.request.user)
+        form.instance.author = author
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        author = Profile.objects.get(user=self.request.user)
+        ctx['createform'] = ArticleForm(initial={'author': author})
+        return ctx
+    
+class ArticleUpdateView(LoginRequiredMixin, UpdateView):
+    model = Article
+    form_class = ArticleForm
+    template_name = 'wiki/article_update.html'
+    
+    def get_success_url(self):
+        return reverse_lazy('wiki:article_detail', kwargs={ 'pk': self.object.pk })
+    
+    def form_valid(self,form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['article'] = Article.objects.get(pk=self.object.pk)
+        return ctx
+    
+              
         
