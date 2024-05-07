@@ -1,14 +1,40 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Wiki</title>
-	</head>
-	<body>
-		<h1>{{ object.title }}</h1>
-		<h3>Category: {{ object.category }}</h3>
-		<h4>Created on {{ object.createdon }}</h4>
-		<p><i>Last updated on {{ object.updatedon }}</i></p>
-		<br />	
-		<pre>{{ object.entry }}</pre>
-	</body>
-</html>
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block content%}
+	<h1>{{ article.title }}</h1>
+	{% if article.header_image %}
+		<img src="{{ article.header_image.url }}" alt="there should be an image here!!">
+	{% endif %}
+	<h3>Category: {{ article.category }}</h3>
+	<h4>Created on {{ article.createdon }}</h4>
+	<p><i>Last updated on {{ article.updatedon }}</i></p>
+	<br />	
+	<pre>{{ article.entry }}</pre>
+	<br />
+	<h4>See other {{ article.category }}</h4>
+	{% for similars in similar_readings %}
+		<p>
+			<a href="{{ similars.get_absolute_url }}">
+				{{ similars }}
+			</a>
+		</p>
+	{% endfor %}
+	<h4>Comments</h4>
+	{% if request.user.is_authenticated %}
+		<form method="POST">
+			{% csrf_token %}
+			{{ commentform.as_p}}
+			<button type="submit">Leave a comment</button>
+		</form>
+	{% else %}
+		<p><i><a href="{% url 'login' %}">Login to leave a comment.</a></i></p>
+	{% endif %}
+	{% for comment in article.comment_set.all %}
+		<p><b>{{ comment.author }}</b> - <i>{{ comment.createdon }}</i></p>
+		<pre>{{ comment.entry }}</pre>
+	{% empty %}
+		<p> No comments. Be the first to leave one! </p>
+	{% endfor %}
+
+{% endblock %}
