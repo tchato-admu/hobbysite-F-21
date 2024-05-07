@@ -49,7 +49,7 @@
             <li><a href="{% url 'wiki:article_list' %}">Wiki</a></li>
             <li><a href="{% url 'commissions:commissions_list' %}">Commissions</a></li>
             <li><a href="{% url 'merchstore:list' %}">Merchstore</a></li>
-            <li><a href="{% url 'forum:post_list' %}">Forum</a></li>
+            <li><a href="{% url 'forum:thread_list' %}">Forum</a></li>
             {% if user.is_authenticated %}
                 <li>
                     <form action="{% url 'logout' %}" method="POST">

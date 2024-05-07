@@ -1,0 +1,18 @@
+<!-- templates/forum/thread_create.html -->
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block title %}
+    Create a Thread
+{% endblock title %}
+
+{% block content %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Submit</button>
+    </form>
+
+    <a href="{% url 'forum:thread_list' %}">Back to Thread List</a>
+
+{% endblock %}

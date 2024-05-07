@@ -1,0 +1,50 @@
+<!-- templates/forum/thread_list.html -->
+{% extends 'navbar.html' %}
+
+{% block title %}
+    Thread List
+{% endblock title %}
+
+{% block content %}
+
+    <h1 style="text-align: center;">Forum</h1>
+
+    {% if request.user.is_authenticated %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin: 20px;">
+            <h2>My Threads</h2>
+            <ul>
+                {% for thread in threads_by_author %}
+                    <li><a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a></li>
+                {% empty %}
+                    <li>You haven't written any threads.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <h2 style="margin-left: 20px;">All Threads</h2>
+    {% for thread_category in object_list %}
+        <h3 style="margin-left: 40px;">{{ thread_category }}</h3>
+        <p style="margin-left: 60px;">{{ thread_category.description }}</p>
+        <div style="border: 1px solid #ccc; padding: 10px; margin-left: 20px;">
+            <ul>
+                {% if request.user.is_authenticated %}
+                    {% for thread in thread_category.thread_set.all %}
+                        {% if thread not in threads_by_author %}
+                            <li><a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% for thread in thread_category.thread_set.all %}
+                        <li><a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a></li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    {% endfor %}
+
+    <div style="text-align: center;">
+        <a href="{% url 'forum:thread_create' %}"><button style="margin: 10px;">Start a Thread</button></a>
+    </div>
+
+{% endblock %}

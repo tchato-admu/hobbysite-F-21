@@ -1,0 +1,143 @@
+<!-- templates/forum/thread_detail.html -->
+{% extends 'navbar.html' %}
+
+{% block title %}
+    {{ thread.title }}
+{% endblock title %}
+
+{% block content %}
+
+<head>
+    <title>{{ thread.title }}</title>
+    <style>
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 16px; 
+        }
+
+        .edit-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px; 
+        }
+
+        .box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 20px auto; 
+            max-width: 600px; 
+        }
+
+        .related-threads {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px; 
+            max-width: 600px; 
+        }
+
+        .related-threads ul {
+            margin-left: 20px; 
+        }
+
+        .comments-section {
+            text-align: center;
+            margin-bottom: 20px; 
+        }
+
+        .comments-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .comment-item {
+            margin-bottom: 20px;
+        }
+
+        .comments-form {
+            text-align: center;
+            margin-bottom: 20px; 
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin: 20px auto; 
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <h1>{{ thread.title }}</h1>
+        <h2>by {{ thread.author }}</h2>
+
+        <p><strong>Category:</strong> {{ thread.category }}</p>
+        <p><strong>Created On:</strong> {{ thread.created_on }}</p>
+        <p><strong>Last Updated:</strong> {{ thread.updated_on }}</p>
+
+        <p>{{ thread.entry }}</p>
+
+        {% if thread.image %}
+            <img src="{{ thread.image.url }}" alt="Image" object-fit=contain>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            {% if user.profile == thread.author %}
+                <a href="{% url 'forum:thread_update' thread.pk %}" class="edit-link">Edit Thread</a>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    {% if same_category_threads %}
+    <div class="box">
+        <h3>Related Threads in {{ thread.category }} Category</h3>
+        <ul>
+            {% for related_thread in same_category_threads %}
+                <li><a href="{{ related_thread.get_absolute_url }}">{{ related_thread.title }}</a></li>
+            {% endfor %} 
+        </ul>
+    </div>
+    {% else %}
+        <div class="box">
+            <p>No related threads found in the {{ thread.category }} Category</p>
+        </div>
+    {% endif %}
+
+    <div class="box comments-section">
+        <h4>Comments</h4>
+        <ul class="comments-list">
+            {% for comment in thread.comment_set.all %}
+                <li class="comment-item">
+                    <h4>{{ comment.author }}</h4>
+                    <p>{{ comment.entry }}</p>
+                    <p>Created on: {{ comment.created_on }}</p>
+                    <p>Updated on: {{ comment.updated_on }}</p>
+                </li>
+            {% empty %}
+                <li>No comments</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="box comments-form">
+        {% if user.is_authenticated %}
+            <form method="post">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <button type="submit">Submit Comment</button>
+            </form>
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">log in</a> to comment.</p>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'forum:thread_list' %}" class="back-link">Back to Thread List</a>
+
+</body>
+
+{% endblock %}
