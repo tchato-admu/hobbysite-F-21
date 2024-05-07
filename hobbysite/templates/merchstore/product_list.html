@@ -1,24 +1,52 @@
 {% extends "merchstore/base.html" %}
 
 {% block custom_css %}
-    .product_box {
-        display: inline-block;
-        margin: 10px;
-        padding: 10px; 
-        border: 1px solid #ccc; 
-    }
 {% endblock %}
 
-{% block content %}
+{% block custom_content %}
     <h2> Items for Sale: </h2>
+
+    {% if request.user.is_authenticated %}
+    <h3> User's Products </h3>
+    {% for product_type in product_types %}
     <ul>
-        {% for product_type in product_types %}
-        <li>{{ product_type }}</li>
+        <li>{{product_type}}</li>
         <ul>
-            {% for product in product_type.products.all %}
-            <li><a href = "{{ product.get_absolute_url }}">{{ product.name }} </a></li>
+            {% for user_product in user_products %}
+            {% if user_product.product_type == product_type %}
+            <li><a href = "{{ user_product.get_absolute_url }}">{{user_product.name}}</a></li>
+            {% endif %}   
             {% endfor %}
         </ul>
-        {% endfor %}
     </ul>
+    {% endfor %}
+    <h3> All Products </h3>
+    {% for product_type in product_types %}
+    <ul>
+        <li>{{product_type}}</li>
+        <ul>
+            {% for other_product in other_products %}
+            {% if other_product.product_type == product_type %}
+            <li><a href = "{{ other_product.get_absolute_url }}">{{other_product.name}}</a></li>   
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </ul>
+    {% endfor %}
+
+    {% else %}
+    <h3> All Products </h3>
+    <ul>
+        <li>{{product_type}}</li>
+        <ul>
+            {% for product in all_products %}
+            {% if product.product_type == product_type %}
+            <li><a href = "{{ product.get_absolute_url }}">{{product.name}}</a></li>   
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </ul>
+    {% endif %}
+
+    <button><a href = "{% url 'merchstore:product-create' %}">Create Product</a></button>
 {% endblock %}
