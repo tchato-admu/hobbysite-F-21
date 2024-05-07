@@ -23,12 +23,12 @@ class ArticleListView(AuthorProfileMixin, ListView):
     template_name = 'blog/article_list.html'
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         author = self.get_author_profile()
         if author:
             articles_by_author = Article.objects.filter(author=author)
-            ctx['articles_by_author'] = articles_by_author
-        return ctx
+            context['articles_by_author'] = articles_by_author
+        return context
 
 class ArticleDetailView(DetailView):
     model = Article

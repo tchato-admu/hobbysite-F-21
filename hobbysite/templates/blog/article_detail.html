@@ -9,65 +9,135 @@
 
 <head>
     <title>{{ article.title }}</title>
+    <style>
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 16px; 
+        }
+
+        .edit-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px; 
+        }
+
+        .box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 20px auto; 
+            max-width: 600px; 
+        }
+
+        .related-articles {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px; 
+            max-width: 600px; 
+        }
+
+        .related-articles ul {
+            margin-left: 20px; 
+        }
+
+        .comments-section {
+            text-align: center;
+            margin-bottom: 20px; 
+        }
+
+        .comments-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .comment-item {
+            margin-bottom: 20px;
+        }
+
+        .comments-form {
+            text-align: center;
+            margin-bottom: 20px; 
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin: 20px auto; 
+        }
+
+    </style>
 </head>
 
 <body>
-    <h1>{{ article.title }}</h1>
-    <h2>by {{ article.author }}</h2>
+    <div class="box">
+        <h1>{{ article.title }}</h1>
+        <h2>by {{ article.author }}</h2>
 
-    <p><strong>Category:</strong> {{ article.category }}</p>
-    <p><strong>Created On:</strong> {{ article.created_on }}</p>
-    <p><strong>Last Updated:</strong> {{ article.updated_on }}</p>
+        <p><strong>Category:</strong> {{ article.category }}</p>
+        <p><strong>Created On:</strong> {{ article.created_on }}</p>
+        <p><strong>Last Updated:</strong> {{ article.updated_on }}</p>
 
-    {% if article.header_image %}
-        <img src="{{ article.header_image.url }}" alt="Image">
-    {% endif %}
-
-    <p>{{ article.entry }}</p>
-
-    {% if user.is_authenticated %}
-        {% if user.profile == article.author %}
-            <a href="{% url 'blog:article_update' article.pk %}">Edit Article</a>
+        {% if article.header_image %}
+            <img src="{{ article.header_image.url }}" alt="Image">
         {% endif %}
-    {% endif %}
+
+        <p>{{ article.entry }}</p>
+
+        {% if user.is_authenticated %}
+            {% if user.profile == article.author %}
+                <a href="{% url 'blog:article_update' article.pk %}" class="edit-link">Edit Article</a>
+            {% endif %}
+        {% endif %}
+    </div>
 
     {% if articles_by_author %}
-    <h3>Related Articles by {{ article.author }}</h3>
-    <ul>
-        {% for related_article in articles_by_author %}
-            <li><a href="{{ related_article.get_absolute_url }}">{{ related_article.title }}</a></li>
-        {% endfor %} 
-    </ul>
+    <div class="box">
+        <h3>Related Articles by {{ article.author }}</h3>
+        <ul>
+            {% for related_article in articles_by_author %}
+                <li><a href="{{ related_article.get_absolute_url }}">{{ related_article.title }}</a></li>
+            {% endfor %} 
+        </ul>
+    </div>
     {% else %}
-        <p>No related articles found for {{ article.author }}</p>
+        <div class="box">
+            <p>No related articles found for {{ article.author }}</p>
+        </div>
     {% endif %}
 
+    <div class="box comments-form">
+        {% if user.is_authenticated %}
+            <form method="post">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <button type="submit">Submit Comment</button>
+            </form>
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">log in</a> to comment.</p>
+        {% endif %}
+    </div>
 
-    {% if user.is_authenticated %}
-        <form method="post">
-            {% csrf_token %}
-            {{ comment_form.as_p }}
-            <button type="submit">Submit Comment</button>
-        </form>
-    {% else %}
-        <p>Please <a href="{% url 'login' %}">log in</a> to comment.</p>
-    {% endif %}
+    <div class="box comments-section">
+        <h4>Comments</h4>
+        <ul class="comments-list">
+            {% for comment in article.comment_set.all %}
+                <li class="comment-item">
+                    <h4>{{ comment.author }}</h4>
+                    <p>{{ comment.entry }}</p>
+                    <p>Created on: {{ comment.created_on }}</p>
+                    <p>Updated on: {{ comment.updated_on }}</p>
+                </li>
+            {% empty %}
+                <li>No comments</li>
+            {% endfor %}
+        </ul>
+    </div>
 
-    <h4>Comments</h4>
-    <ul>
-        {% for comment in article.comment_set.all %}
-            <li>
-                <h4>{{ comment.author }}</h4>
-                <p>{{ comment.entry }}</p>
-                <p>Created on: {{ comment.created_on }}</p>
-                <p>Updated on: {{ comment.updated_on }}</p>
-            </li>
-        {% empty %}
-            <li>No comments</li>
-        {% endfor %}
-    </ul>
+    <a href="{% url 'blog:article_list' %}" class="back-link">Back to Article List</a>
 
-    <a href="{% url 'blog:article_list' %}">Back to Article List</a>
 </body>
 </html>
 {% endblock %}
