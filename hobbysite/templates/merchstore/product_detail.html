@@ -7,12 +7,29 @@
     }
 {% endblock %}
 
-{% block content %}
-    <div>
-        <h2>{{ product.name }}</h2>
-        <p>Product Type: {{ product.product_type }}
-        <br> Price: P{{ product.price }} 
-        <br><br> {{product.description }}
-        </p>
-    </div>
-{% endblock %}
+{% block custom_content %}
+    <h3>{{product.name}}</h3>
+    <h4>{{product.description}}</h4>
+    <h4> 
+        Type: {{product.product_type}}
+        <br>Price: P{{product.price}}
+        <br>Stocks: {{product.stock}}
+        <br>Status: {{product.status}}
+        <br>By: {{product.owner}}    
+    </h4>
+    {% if product.owner == user %}
+        <button href = {{product.update_product_url}}>Edit</button>
+
+    {% else %}
+        <form method = "POST">
+            {% csrf_token %}
+            {{ form.as_div }}
+            {% if product.stock == 0 %}
+                <button disabled>Buy</button>
+            {% else %}
+                <button>Buy</button>
+            {% endif %}
+        </form>
+    {% endif %}
+
+{% endblock %}  
