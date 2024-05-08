@@ -133,13 +133,11 @@ def transactions_list(request):
     user = Profile.objects.get(user=request.user)
     user_products = Transaction.objects.filter(product__owner=user)
     transactions_by_buyers = {}
-
     for transaction in user_products:
         buyer = transaction.buyer
         if buyer not in transactions_by_buyers:
             transactions_by_buyers[buyer] = []
         transactions_by_buyers[buyer].append(transaction)
-
     ctx = {
         'transactions_by_buyers': transactions_by_buyers,
     }

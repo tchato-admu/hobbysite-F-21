@@ -9,6 +9,7 @@
         {% for transaction in transactions %}
         <ul>
             <li>{{ transaction.product.name }}: {{ transaction.amount }} item/s
+                <br>Order total: {{transaction.total_am}}
                 <br>Created on: {{transaction.created_on}}
                 <br> Status: {{transaction.status}}
             </li>
