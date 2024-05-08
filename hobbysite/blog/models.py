@@ -22,8 +22,8 @@ class ArticleCategory(models.Model):
     
 class Article(models.Model):
     title = models.CharField(max_length=255)
-    author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null = True)
-    category = models.ForeignKey(ArticleCategory, on_delete=models.SET_NULL, null = True)
+    author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null = True, related_name='blogArticleAuthor')
+    category = models.ForeignKey(ArticleCategory, on_delete=models.SET_NULL, null = True, related_name='blogArticleCategory')
     entry = models.TextField()
     header_image = models.ImageField(upload_to='images/', null = True, blank = True)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -39,8 +39,8 @@ class Article(models.Model):
         return reverse('blog:article_detail', args=[self.pk])
     
 class Comment(models.Model):
-    author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, related_name='blogCommentsAuthor')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='blogCommentsArticle')
     entry = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)

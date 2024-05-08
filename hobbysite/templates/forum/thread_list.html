@@ -13,7 +13,7 @@
         <div style="border: 1px solid #ccc; padding: 10px; margin: 20px;">
             <h2>My Threads</h2>
             <ul>
-                {% for thread in threads_by_author %}
+                {% for thread in threads_by_author.forumAuthor.all %}
                     <li><a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a></li>
                 {% empty %}
                     <li>You haven't written any threads.</li>
@@ -29,13 +29,13 @@
         <div style="border: 1px solid #ccc; padding: 10px; margin-left: 20px;">
             <ul>
                 {% if request.user.is_authenticated %}
-                    {% for thread in thread_category.thread_set.all %}
-                        {% if thread not in threads_by_author %}
+                    {% for thread in thread_category.forumCategory.all %}
+                        {% if thread not in threads_by_author.forumAuthor.all %}
                             <li><a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a></li>
                         {% endif %}
                     {% endfor %}
                 {% else %}
-                    {% for thread in thread_category.thread_set.all %}
+                    {% for thread in thread_category.forumCategory.all %}
                         <li><a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a></li>
                     {% endfor %}
                 {% endif %}
