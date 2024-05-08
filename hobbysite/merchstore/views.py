@@ -33,17 +33,17 @@ def product_detail(request, pk):
     if request.method == "POST":
         form = TransactionForm(request.POST)
         if form.is_valid():
-            transaction = form.save(commit=False)
-            transaction.amount = form.cleaned_data.get('amount')                  
-            transaction.product = product
-            transaction.created_on = timezone.now()
-            if product.stock >= transaction.amount:
-                product.stock -= transaction.amount
-                if product.stock == 0:
-                    product.status = Product.status_choices[2][1]
-                product.save()
-            transaction.status = Transaction.status_choices[0][1]
             if request.user.is_authenticated:
+                transaction = form.save(commit=False)
+                transaction.amount = form.cleaned_data.get('amount')                  
+                transaction.product = product
+                transaction.created_on = timezone.now()
+                if product.stock >= transaction.amount:
+                    product.stock -= transaction.amount
+                    if product.stock == 0:
+                        product.status = Product.status_choices[2][1]
+                    product.save()
+                transaction.status = Transaction.status_choices[0][1]
                 transaction.buyer = request.user.profile
                 transaction.save()
                 return redirect(reverse('merchstore:cart'))
@@ -121,8 +121,7 @@ def transactions_cart(request):
         owner = transaction.product.owner
         if owner not in transactions_by_owner:
             transactions_by_owner[owner] = []
-        transactions_by_owner[owner].append(transaction)
-    
+        transactions_by_owner[owner].append(transaction)  
     ctx = {
         'transactions_by_owner': transactions_by_owner,
     }
