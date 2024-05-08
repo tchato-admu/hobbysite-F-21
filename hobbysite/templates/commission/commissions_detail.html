@@ -1,20 +1,95 @@
 {% extends "commission/base.html" %}
 {% block content %}
-    <div style="background-color: #ffb6c1; padding: 20px; font-family: Arial, sans-serif;">
-        <h1>{{ commissions_detail.title }}</h1>
-        <p style="font-size: 16px;">People required: {{ commissions_detail.people_required }}</p>
-        <p style="font-size: 16px;">Submitted on {{ commissions_detail.created_on }}</p>
-        <p style="font-size: 16px;">Updated on {{ commissions_detail.updated_on }}</p>
-        <br/>
-        <p style="font-size: 16px;">{{ commissions_detail.description }}</p>
-        <br/>
-        <h2 style="font-size: 18px;">Comments</h2>
-        {% for comment in commissions_detail.comments.all %}
-        <p style="font-size: 14px;">Created: {{ comment.created_on }}</p>
-        <p style="font-size: 14px;">Updated: {{ comment.updated_on }}</p>
-        <li style="font-size: 16px;">{{comment.entry}}</li>
-        <br/>
-        <br/>
-        {% endfor %}
+<style>
+    body {
+        background-color: powderblue;
+        font-family: Arial, sans-serif;
+    }
+
+    .commission-detail {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .job-card {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .role {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .status {
+        font-style: italic;
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+    .manpower {
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .apply-button {
+        background-color: #b7e4c7;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .apply-button:hover {
+        background-color: #8ad2ac;
+    }
+</style>
+<div class="commission-detail">
+    <h1>{{ commission_detail.title }}</h1>
+    <a href="/commissions/{{ commission_detail.id }}/edit" {% if request.user.profile != commission_detail.author %}hidden{% endif %} class="edit-link">Edit Details</a>
+    <p>People required: {{ commission_detail.people_required }}</p>
+    <p>Submitted on {{ commission_detail.created_on }}</p>
+    <p>Edited on {{ commission_detail.updated_on }}</p>
+    <br/>
+    <br/>
+    <p>{{ commission_detail.description }}</p>
+    <br/>
+    <br/>
+    <h2>Jobs</h2>
+    <p>Total manpower: {{ total_manpower_sum }}</p>
+    <p>Open manpower: {{ open_manpower }}</p>
+
+    {% for commission_job in commission_jobs %}
+    <div class="job-card">
+        <p class="role">{{ commission_job.role }}</p>
+        <p class="status">{{ commission_job.get_status_display }}</p>
+        <p class="manpower">People required: {{ commission_job.manpower_required }}</p>
+    
+        <form method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input type="hidden" name="job" value="{{ commission_job }}">
+            <input
+            type="submit"
+            value="Apply"
+            {% if open_manpower == 0 or commission_detail.status == "Full" or commission_detail.status == "Completed" or commission_detail.status == "Discontinued"  %}
+            disabled
+            {% endif %}
+            class="apply-button"
+            >
+        </form>
     </div>
+    {% endfor %}
+</div>
 {% endblock %}
