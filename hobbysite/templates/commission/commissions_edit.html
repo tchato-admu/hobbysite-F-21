@@ -1,0 +1,37 @@
+{% extends "commission/base.html" %}
+{% block content %}
+<style>
+    body {
+        background-color: powderblue;
+        font-family: Arial, sans-serif;
+        padding-top: 20px; 
+    }
+    h2 {
+        color: #333;
+    }
+    form {
+        margin-top: 20px;
+    }
+    input[type="submit"] {
+        background-color: #b7e4c7;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    input[type="submit"]:hover {
+        background-color: #8ad2ac;
+    }
+</style>
+<h2>Edit Commission</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ commission_form }}
+    <h3>Edit Job</h3>
+    {{ job_form }}
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}

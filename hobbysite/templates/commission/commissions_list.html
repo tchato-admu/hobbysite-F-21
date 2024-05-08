@@ -1,13 +1,79 @@
-{% extends "commission/base.html" %}
+{% extends "commission/base.html" %} 
 {% block content %}
-    <div style="background-color: #f0e68c; padding: 20px; font-family: 'Times New Roman', Times, serif; font-size: 18px; border: 1px solid #ffb6c1;">
-        <ul>
-            {% for commission in commissions_list %}
-            <li style="border-bottom: 1px solid #ffb6c1; padding-bottom: 10px;">
-                <a href="{{commission.get_absolute_url}}" style="color: #8b4513; text-decoration: none;">{{commission.title}}</a>
-                <p style="color: #696969; margin-top: 5px;">Submitted: {{ commission.created_on }}</p>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-{% endblock %}
+<style>
+    body {
+        background-color: powderblue;
+        font-family: Arial, sans-serif;
+        padding-top: 20px; 
+    }
+    h1 {
+        color: #333;
+    }
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    li {
+        margin-bottom: 20px;
+    }
+    .btn {
+        background-color: #b7e4c7; 
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-right: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    .btn:hover {
+        background-color: #8ad2ac; 
+    }
+    p {
+        color: #666;
+    }
+</style>
+
+<form action="/commissions/add">
+    <button type="submit" class="btn">Create Commission</button>
+</form>
+
+{% if request.user.is_authenticated %}
+<h1>Created Commissions</h1>
+<ul>
+    {% for commission in created_commissions %}
+    <li>
+        <button type="button" class="btn" onclick="window.location.href='{{commission.get_absolute_url}}'">{{commission.title}}</button>
+        <p>Submitted: {{ commission.created_on }}</p>
+        <p>Status: {{ commission.get_status_display }}</p>
+    </li>
+    <br />
+    {% endfor %}
+</ul>
+<h1>Commissions Applied</h1>
+<ul>
+    {% for commission in user_applications %}
+    <li>
+        <button type="button" class="btn" onclick="window.location.href='{{commission.get_absolute_url}}'">{{commission.title}}</button>
+        <p>Submitted: {{ commission.created_on }}</p>
+        <p>Status: {{ commission.get_status_display }}</p>
+    </li>
+    <br />
+    {% endfor %}
+</ul>
+{% endif %}
+<h1>All Commissions</h1>
+<ul>
+    {% for commission in all_commissions %}
+    <li>
+        <button type="button" class="btn" onclick="window.location.href='{{commission.get_absolute_url}}'">{{commission.title}}</button>
+        <p>Submitted: {{ commission.created_on }}</p>
+        <p>Status: {{ commission.get_status_display }}</p>
+    </li>
+    <br />
+    {% endfor %}
+</ul>
+{% endblock%}
