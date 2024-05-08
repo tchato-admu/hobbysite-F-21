@@ -2,8 +2,6 @@
 {% block custom_css %}
 {% endblock %}
 {% block custom_content %}
-    {% if request.user.is_authenticated %}
-    
     <h2> Cart </h2>
     {% for owner, transactions in transactions_by_owner.items %}
     <div class = "transaction_status">
@@ -18,5 +16,4 @@
         {% endfor %}
     </div>
     {% endfor %}
-    {% endif %}
 {% endblock %}

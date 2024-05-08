@@ -3,17 +3,17 @@
 {% endblock %}
 {% block custom_content %}
     <h3>{{product.name}}</h3>
-    <h4>{{product.description}}</h4>
-    <h4> 
-        Type: {{product.product_type}}
-        <br>Price: P{{product.price}}
-        <br>Stocks: {{product.stock}}
-        <br>Status: {{product.status}}
-        <br>By: {{product.owner}}    
-    </h4>
+    <p>{{product.description}}</p>
+    <p> 
+        <span style="font-weight: bold;">Type:</span> {{product.product_type}}
+        <br><span style="font-weight: bold;">Price:</span> P{{product.price}}
+        <br><span style="font-weight: bold;">Stocks:</span> {{product.stock}}
+        <br><span style="font-weight: bold;">Status:</span> {{product.status}}
+        <br><span style="font-weight: bold;">By:</span> {{product.owner}}    
+    </p>
+
     {% if product.owner == request.user.profile %}
         <button><a href = "{{product.update_product_url}}">Edit</a></button>
-
     {% else %}
         <form method = "POST">
             {% csrf_token %}

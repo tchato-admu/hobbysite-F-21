@@ -2,7 +2,6 @@
 {% block custom_css %}
 {% endblock %}
 {% block custom_content %}
-    {% if request.user.is_authenticated %}
     <h2> Transactions List </h2>
     {% for buyer, transactions in transactions_by_buyers.items %}
     <div class = "transaction_status">
@@ -17,5 +16,4 @@
         {% endfor %}
     </div>
     {% endfor %}
-    {% endif %}
 {% endblock %}

@@ -22,6 +22,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         form.save()
         return super().form_valid(form)
     
+
 class UserCreateView(CreateView):
     model = User
     form_class = RegistrationForm

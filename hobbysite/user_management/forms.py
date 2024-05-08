@@ -12,6 +12,7 @@ class ProfileForm(forms.ModelForm):
             "email_address"
         ]
 
+
 class RegistrationForm(UserCreationForm):
     class Meta:
         model = User
