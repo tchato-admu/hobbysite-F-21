@@ -3,7 +3,7 @@
 {% endblock %}
 {% block custom_content %}
     <h2> Items for Sale: </h2>
-
+    <hr>
     {% if request.user.is_authenticated %}
     <h3> User's Products </h3>
     {% for product_type in product_types %}
@@ -48,5 +48,6 @@
     </ul>
     {% endif %}
     
+    <br>
     <a href = "{% url 'merchstore:product-create' %}"><button>Create Product</button></a>
 {% endblock %}
