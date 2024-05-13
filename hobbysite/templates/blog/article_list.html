@@ -12,7 +12,7 @@
         <div style="border: 1px solid #ccc; padding: 10px; margin: 20px;">
             <h2>My Articles</h2>
             <ul>
-                {% for article in articles_by_author.blogArticleAuthor.all %}
+                {% for article in articles_by_author %}
                     <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
                 {% empty %}
                     <li>No articles have been written.</li>
@@ -21,6 +21,11 @@
             <div style="text-align: center;">
                 <a href="{% url 'blog:article_create' %}"><button style="margin: 10px;">Write an Article</button></a>
             </div>
+        </div>
+    {% else %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin: 20px;">
+            <h2>Login to View Your Articles</h2>
+            <p>Please <a href="{% url 'login' %}">log in</a> to view your articles.</p>
         </div>
     {% endif %}
 
@@ -32,8 +37,14 @@
             <ul>
                 {% for article in article_category.blogArticleCategory.all %}
                     <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+                {% empty %}
+                    <li>No articles in this category.</li>
                 {% endfor %}
             </ul>
+        </div>
+    {% empty %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin-left: 80px;">
+            <p>No articles available.</p>
         </div>
     {% endfor %}
 
