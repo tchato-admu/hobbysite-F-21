@@ -35,11 +35,17 @@
         <p style="margin-left: 60px;">{{ article_category.description }}</p>
         <div style="border: 1px solid #ccc; padding: 10px; margin-left: 80px;">
             <ul>
-                {% for article in article_category.blogArticleCategory.all %}
-                    <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
-                {% empty %}
-                    <li>No articles in this category.</li>
-                {% endfor %}
+                {% if request.user.is_authenticated %}
+                    {% for article in article_category.blogArticleCategory.all %}
+                        {% if article not in articles_by_author %}
+                            <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% for article in article_category.blogArticleCategory.all %}
+                        <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+                    {% endfor %}
+                {% endif %}
             </ul>
         </div>
     {% empty %}
